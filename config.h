@@ -5,7 +5,7 @@
 static const unsigned int borderpx       = 0;   /* border pixel of windows */
 static const int corner_radius           = 10;
 #else
-static const unsigned int borderpx       = 0;   /* border pixel of windows */
+static const unsigned int borderpx       = 1;   /* border pixel of windows */
 #endif // ROUNDED_CORNERS_PATCH
 static const unsigned int snap           = 32;  /* snap pixel */
 #if SWALLOW_PATCH
@@ -15,10 +15,10 @@ static const int swallowfloating         = 0;   /* 1 means swallow floating wind
 static int nomodbuttons                  = 1;   /* allow client mouse button bindings that have no modifier */
 #endif // NO_MOD_BUTTONS_PATCH
 #if VANITYGAPS_PATCH
-static const unsigned int gappih         = 1;  /* horiz inner gap between windows */
-static const unsigned int gappiv         = 1;  /* vert inner gap between windows */
-static const unsigned int gappoh         = 1;  /* horiz outer gap between windows and screen edge */
-static const unsigned int gappov         = 1;  /* vert outer gap between windows and screen edge */
+static const unsigned int gappih         = 20;  /* horiz inner gap between windows */
+static const unsigned int gappiv         = 10;  /* vert inner gap between windows */
+static const unsigned int gappoh         = 10;  /* horiz outer gap between windows and screen edge */
+static const unsigned int gappov         = 30;  /* vert outer gap between windows and screen edge */
 static const int smartgaps_fact          = 1;   /* gap factor when there is only one client; 0 = no gaps, 3 = 3x outer gaps */
 #endif // VANITYGAPS_PATCH
 #if AUTOSTART_PATCH
@@ -47,11 +47,11 @@ static const int showtab                 = showtab_auto;        /* Default tab b
 static const int toptab                  = False;               /* False means bottom tab bar */
 #endif // TAB_PATCH
 #if BAR_HEIGHT_PATCH
-static const int bar_height              = 11;   /* 0 means derive from font, >= 1 explicit height */
+static const int bar_height              = 10;   /* 0 means derive from font, >= 1 explicit height */
 #endif // BAR_HEIGHT_PATCH
 #if BAR_PADDING_PATCH
-static const int vertpad                 = 1;  /* vertical padding of bar */
-static const int sidepad                 = 1;  /* horizontal padding of bar */
+static const int vertpad                 = 10;  /* vertical padding of bar */
+static const int sidepad                 = 10;  /* horizontal padding of bar */
 #endif // BAR_PADDING_PATCH
 #if BAR_WINICON_PATCH
 #define ICONSIZE 20    /* icon size */
@@ -81,7 +81,7 @@ static const int statusmon               = 0;
 static const int statusmon               = 'A';
 #endif // BAR_STATUSALLMONS_PATCH | BAR_STATICSTATUS_PATCH
 #if BAR_STATUSPADDING_PATCH
-static const int horizpadbar             = -4;   /* horizontal padding for statusbar */
+static const int horizpadbar             = -2;   /* horizontal padding for statusbar */
 static const int vertpadbar              = 0;   /* vertical padding for statusbar */
 #endif // BAR_STATUSPADDING_PATCH
 #if BAR_STATUSBUTTON_PATCH
@@ -91,16 +91,28 @@ static const char buttonbar[]            = "<O>";
 static const unsigned int systrayspacing = 0;   /* systray spacing */
 static const int showsystray             = 1;   /* 0 means no systray */
 #endif // BAR_SYSTRAY_PATCH
+#if BAR_TAGLABELS_PATCH
+static const char ptagf[] = "[%s %s]";          /* format of a tag label */
+static const char etagf[] = "[%s]";             /* format of an empty tag */
+static const int lcaselbl = 0;                  /* 1 means make tag label lowercase */
+#endif // BAR_TAGLABELS_PATCH
+#if BAR_UNDERLINETAGS_PATCH
+static const unsigned int ulinepad = 5;         /* horizontal padding between the underline and tag */
+static const unsigned int ulinestroke  = 2;     /* thickness / height of the underline */
+static const unsigned int ulinevoffset = 0;     /* how far above the bottom of the bar the line should appear */
+static const int ulineall = 0;                  /* 1 to show underline on all tags, 0 for just the active ones */
+#endif // BAR_UNDERLINETAGS_PATCH
+
 /* Indicators: see patch/bar_indicators.h for options */
 static int tagindicatortype              = INDICATOR_NONE;
 static int tiledindicatortype            = INDICATOR_NONE;
 static int floatindicatortype            = INDICATOR_NONE;
 #if FAKEFULLSCREEN_CLIENT_PATCH && !FAKEFULLSCREEN_PATCH
-static int fakefsindicatortype           = INDICATOR_PLUS;
-static int floatfakefsindicatortype      = INDICATOR_PLUS_AND_LARGER_SQUARE;
+static int fakefsindicatortype           = INDICATOR_NONE;
+static int floatfakefsindicatortype      = INDICATOR_NONE;
 #endif // FAKEFULLSCREEN_CLIENT_PATCH
 #if ONLYQUITONEMPTY_PATCH
-static const int quit_empty_window_count = 2;   /* only allow dwm to quit if no windows are open, value here represents number of deamons */
+static const int quit_empty_window_count = 0;   /* only allow dwm to quit if no (<= count) windows are open */
 #endif // ONLYQUITONEMPTY_PATCH
 #if BAR_EXTRASTATUS_PATCH
 static const char statussep              = ';'; /* separator between status bars */
@@ -113,60 +125,55 @@ static void (*bartabmonfns[])(Monitor *) = { NULL /* , customlayoutfn */ };
 #endif // MONOCLE_LAYOUT
 #endif // BAR_TABGROUPS_PATCH
 #if BAR_PANGO_PATCH
-static const char font[]                 = "monospace:size=10";
+static const char font[]                 = "monospace 10";
 #else
-static const char *fonts[]               = {
-	"Anonymous Pro:pixelsize=11:antialias=false",
-	/* "pif:pixelsize=10:autohint=true", */
-	"Material Design Icons:pixelsize=10:antialias=false",
-	"Noto Color Emoji:pixelsize=10:antialias=false",
-};
+static const char *fonts[]               = { "Anonymous Pro:pixelsize=10:antialias=false" };
 #endif // BAR_PANGO_PATCH
-static const char dmenufont[]            = "Anonymous Pro:pixelsize=11:antialias=false";
+static const char dmenufont[]            = "Anonymous Pro:pixelsize=10:antialias=false";
 
 static char c000000[]                    = "#000000"; // placeholder value
 
 #if BAR_FLEXWINTITLE_PATCH
 #endif // BAR_FLEXWINTITLE_PATCH
-static char normfgcolor[]                = "#d4be98";
-static char normbgcolor[]                = "#282828";
-static char normbordercolor[]            = "#282828";
-static char normfloatcolor[]             = "#282828";
+static char normfgcolor[]                = "#bbbbbb";
+static char normbgcolor[]                = "#222222";
+static char normbordercolor[]            = "#444444";
+static char normfloatcolor[]             = "#db8fd9";
 
-static char selfgcolor[]                 = "#d4be98";
-static char selbgcolor[]                 = "#282828";
-static char selbordercolor[]             = "#7c6f64";
-static char selfloatcolor[]              = "#7c6f64";
+static char selfgcolor[]                 = "#eeeeee";
+static char selbgcolor[]                 = "#005577";
+static char selbordercolor[]             = "#005577";
+static char selfloatcolor[]              = "#005577";
 
-static char titlenormfgcolor[]           = "#7c6f64";
-static char titlenormbgcolor[]           = "#282828";
-static char titlenormbordercolor[]       = "#282828";
-static char titlenormfloatcolor[]        = "#282828";
+static char titlenormfgcolor[]           = "#bbbbbb";
+static char titlenormbgcolor[]           = "#222222";
+static char titlenormbordercolor[]       = "#444444";
+static char titlenormfloatcolor[]        = "#db8fd9";
 
-static char titleselfgcolor[]            = "#d4be98";
-static char titleselbgcolor[]            = "#282828";
-static char titleselbordercolor[]        = "#282828";
-static char titleselfloatcolor[]         = "#282828";
+static char titleselfgcolor[]            = "#eeeeee";
+static char titleselbgcolor[]            = "#005577";
+static char titleselbordercolor[]        = "#005577";
+static char titleselfloatcolor[]         = "#005577";
 
-static char tagsnormfgcolor[]            = "#7c6f64";
-static char tagsnormbgcolor[]            = "#282828";
-static char tagsnormbordercolor[]        = "#282828";
-static char tagsnormfloatcolor[]         = "#282828";
+static char tagsnormfgcolor[]            = "#bbbbbb";
+static char tagsnormbgcolor[]            = "#222222";
+static char tagsnormbordercolor[]        = "#444444";
+static char tagsnormfloatcolor[]         = "#db8fd9";
 
-static char tagsselfgcolor[]             = "#d4be98";
-static char tagsselbgcolor[]             = "#282828";
-static char tagsselbordercolor[]         = "#282828";
-static char tagsselfloatcolor[]          = "#282828";
+static char tagsselfgcolor[]             = "#eeeeee";
+static char tagsselbgcolor[]             = "#005577";
+static char tagsselbordercolor[]         = "#005577";
+static char tagsselfloatcolor[]          = "#005577";
 
-static char hidnormfgcolor[]             = "#282828";
-static char hidselfgcolor[]              = "#d4be98";
-static char hidnormbgcolor[]             = "#282828";
-static char hidselbgcolor[]              = "#282828";
+static char hidnormfgcolor[]             = "#005577";
+static char hidselfgcolor[]              = "#227799";
+static char hidnormbgcolor[]             = "#222222";
+static char hidselbgcolor[]              = "#222222";
 
-static char urgfgcolor[]                 = "#00ffff";
-static char urgbgcolor[]                 = "#000fff";
-static char urgbordercolor[]             = "#0000ff";
-static char urgfloatcolor[]              = "#00000f";
+static char urgfgcolor[]                 = "#bbbbbb";
+static char urgbgcolor[]                 = "#222222";
+static char urgbordercolor[]             = "#ff0000";
+static char urgfloatcolor[]              = "#db8fd9";
 
 #if BAR_FLEXWINTITLE_PATCH
 static char normTTBbgcolor[]             = "#330000";
@@ -205,7 +212,7 @@ static char selfloatbgcolor[]            = "#117799";
 #endif // BAR_FLEXWINTITLE_PATCH
 
 #if BAR_ALPHA_PATCH
-static const unsigned int baralpha = 128;
+static const unsigned int baralpha = 0xd0;
 static const unsigned int borderalpha = OPAQUE;
 static const unsigned int alphas[][3] = {
 	/*                       fg      bg        border     */
@@ -430,8 +437,8 @@ static const Rule rules[] = {
 	RULE(.wintype = WTYPE "UTILITY", .isfloating = 1)
 	RULE(.wintype = WTYPE "TOOLBAR", .isfloating = 1)
 	RULE(.wintype = WTYPE "SPLASH", .isfloating = 1)
-	/* RULE(.class = "Gimp", .tags = 1 << 4) */
-	/* RULE(.class = "Firefox", .tags = 1 << 7) */
+	RULE(.class = "Gimp", .tags = 1 << 4)
+	RULE(.class = "Firefox", .tags = 1 << 7)
 	#if SCRATCHPADS_PATCH
 	RULE(.instance = "spterm", .tags = SPTAG(0), .isfloating = 1)
 	#endif // SCRATCHPADS_PATCH
@@ -476,6 +483,9 @@ static const Inset default_inset = {
  */
 static const BarRule barrules[] = {
 	/* monitor   bar    alignment         widthfunc                drawfunc                clickfunc                name */
+	#if BAR_LTSYMBOL_PATCH
+	{ -1,        0,     BAR_ALIGN_LEFT,   width_ltsymbol,          draw_ltsymbol,          click_ltsymbol,          "layout" },
+	#endif // BAR_LTSYMBOL_PATCH
 	#if BAR_STATUSBUTTON_PATCH
 	{ -1,        0,     BAR_ALIGN_LEFT,   width_stbutton,          draw_stbutton,          click_stbutton,          "statusbutton" },
 	#endif // BAR_STATUSBUTTON_PATCH
@@ -485,15 +495,15 @@ static const BarRule barrules[] = {
 	#if BAR_TAGS_PATCH
 	{ -1,        0,     BAR_ALIGN_LEFT,   width_tags,              draw_tags,              click_tags,              "tags" },
 	#endif // BAR_TAGS_PATCH
+	#if BAR_TAGLABELS_PATCH
+	{ -1,        0,     BAR_ALIGN_LEFT,   width_taglabels,         draw_taglabels,         click_taglabels,         "taglabels" },
+	#endif // BAR_TAGLABELS_PATCH
 	#if BAR_TAGGRID_PATCH
 	{ -1,        0,     BAR_ALIGN_LEFT,   width_taggrid,           draw_taggrid,           click_taggrid,           "taggrid" },
 	#endif // BAR_TAGGRID_PATCH
 	#if BAR_SYSTRAY_PATCH
 	{  0,        0,     BAR_ALIGN_RIGHT,  width_systray,           draw_systray,           click_systray,           "systray" },
 	#endif // BAR_SYSTRAY_PATCH
-	#if BAR_LTSYMBOL_PATCH
-	{ -1,        0,     BAR_ALIGN_LEFT,   width_ltsymbol,          draw_ltsymbol,          click_ltsymbol,          "layout" },
-	#endif // BAR_LTSYMBOL_PATCH
 	#if BAR_STATUSCOLORS_PATCH && BAR_STATUSCMD_PATCH
 	{ statusmon, 0,     BAR_ALIGN_RIGHT,  width_statuscolors,      draw_statuscolors,      click_statuscmd,         "statuscolors" },
 	#elif BAR_STATUSCOLORS_PATCH
@@ -557,6 +567,7 @@ static const int nmaster     = 1;    /* number of clients in master area */
 static const int nstack      = 0;    /* number of clients in primary stack area */
 #endif // FLEXTILE_DELUXE_LAYOUT
 static const int resizehints = 0;    /* 1 means respect size hints in tiled resizals */
+static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
 #if DECORATION_HINTS_PATCH
 static const int decorhints  = 1;    /* 1 means respect decoration hints */
 #endif // DECORATION_HINTS_PATCH
@@ -777,7 +788,7 @@ static const char *xkb_layouts[]  = {
 #endif // STACKER_PATCH
 
 #if BAR_HOLDBAR_PATCH
-#define HOLDKEY 0xffeb // replace 0 with the keysym to activate holdbar
+#define HOLDKEY 0 // replace 0 with the keysym to activate holdbar
 #endif // BAR_HOLDBAR_PATCH
 
 /* helper for spawning shell commands in the pre dwm-5.0 fashion */
@@ -788,15 +799,15 @@ static const char *xkb_layouts[]  = {
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
 #endif // NODMENU_PATCH
 static const char *dmenucmd[] = {
-	"dmenu_run_history",
+	"dmenu_run",
 	#if !NODMENU_PATCH
 	"-m", dmenumon,
 	#endif // NODMENU_PATCH
-	//"-fn", dmenufont,
-	//"-nb", normbgcolor,
-	//"-nf", normfgcolor,
-	//"-sb", selbgcolor,
-	//"-sf", selfgcolor,
+	"-fn", dmenufont,
+	"-nb", normbgcolor,
+	"-nf", normfgcolor,
+	"-sb", selbgcolor,
+	"-sf", selfgcolor,
 	#if BAR_DMENUMATCHTOP_PATCH
 	topbar ? NULL : "-b",
 	#endif // BAR_DMENUMATCHTOP_PATCH
@@ -851,8 +862,8 @@ static Key keys[] = {
 	STACKKEYS(MODKEY,                              focus)
 	STACKKEYS(MODKEY|ShiftMask,                    push)
 	#else
-	{ MODKEY,                       XK_j,          focusstack,             {.i = +2 } },
-	{ MODKEY,                       XK_k,          focusstack,             {.i = -2 } },
+	{ MODKEY,                       XK_j,          focusstack,             {.i = +1 } },
+	{ MODKEY,                       XK_k,          focusstack,             {.i = -1 } },
 	#endif // STACKER_PATCH
 	#if FOCUSDIR_PATCH
 	{ MODKEY,                       XK_Left,       focusdir,               {.i = 0 } }, // left
@@ -955,7 +966,7 @@ static Key keys[] = {
 	{ MODKEY|Mod4Mask,              XK_backslash,  shiftviewclients,       { .i = +1 } },
   	#endif // SHIFTVIEW_CLIENTS_PATCH
 	#if BAR_WINTITLEACTIONS_PATCH
-	{ MODKEY,           XK_z,          showhideclient,         {0} },
+	{ MODKEY|ControlMask,           XK_z,          showhideclient,         {0} },
 	#endif // BAR_WINTITLEACTIONS_PATCH
 	{ MODKEY|ShiftMask,             XK_c,          killclient,             {0} },
 	#if KILLUNSEL_PATCH
@@ -1181,8 +1192,8 @@ static Key keys[] = {
 	{ MODKEY|ControlMask,           XK_numbersign, setborderpx,            {.i = 0 } },
 	#endif // SETBORDERPX_PATCH
 	#if CYCLELAYOUTS_PATCH
-	{ MODKEY,           XK_Down,      cyclelayout,            {.i = -1 } },
-	{ MODKEY,           XK_Up,     cyclelayout,            {.i = +1 } },
+	{ MODKEY|ControlMask,           XK_comma,      cyclelayout,            {.i = -1 } },
+	{ MODKEY|ControlMask,           XK_period,     cyclelayout,            {.i = +1 } },
 	#endif // CYCLELAYOUTS_PATCH
 	#if MPDCONTROL_PATCH
 	{ MODKEY,                       XK_F1,         mpdchange,              {.i = -1} },
